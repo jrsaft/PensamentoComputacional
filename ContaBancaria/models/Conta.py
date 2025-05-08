@@ -1,8 +1,6 @@
 
 import time # para salvar a data e horário da transação
 class Conta:
- 
-
     '''
     Classe que implementa métodos para manipular uma conta bancária
     Atributos: titular(str), saldo (float), limite (float) e históricos (lista de dicionários)
@@ -16,12 +14,15 @@ class Conta:
         self.limite = limite
         self.historico = historico
 
-    def depositar(self, valor):
+    def depositar(self, valor, remetente = None): # None para não dar erro.
+        op = 1
+        if destinatario != None:
+            op= 2 # transferencia
         if valor > 0: # Conferindo se o número é negativo
             self.saldo = self.saldo + valor 
-            self.historico.append({"operacao": 1,
-                                    "remetente": self.titular,
-                                    "destinatario": "",
+            self.historico.append({"operacao": op,
+                                    "remetente": remetente,
+                                    "destinatario": self.titular,
                                     "valor": valor,
                                     "saldo": self.saldo,
                                     "dataetempo": int(time.time())}) #Adicionando a transação ao histórico da conta
@@ -30,12 +31,15 @@ class Conta:
             print("O valor é inválido")
             return False
 
-    def sacar(self, valor):
+    def sacar(self, valor, destinatario = None):
+        op = 0
+        if destinatario != None:
+            op= 2 # transferencia
         if valor <= self.saldo:
             self.saldo = self.saldo - valor
-            self.historico.append({"operacao": 0,
+            self.historico.append({"operacao": op,
                                     "remetente": self.titular,
-                                     "destinatario": "",
+                                     "destinatario": destinatario,
                                      "valor": valor,
                                      "saldo": self.saldo,
                                      "dataetempo":int(time.time())}) #Adicionando a transação ao histórico da conta
@@ -65,7 +69,12 @@ class Conta:
                   + ":" + str(dt.tm_sec) + " " + str(dt.tm_mday) + "/" + str(dt.tm_mon) + "/" + str(dt.tm_year))
                 # utilizando de cada item do localtime
             
-    def transferencia(self): # tentar utilizar os defs já prontos para manipular está transferência 
-         
-       
-    
+    def transferencia(self, destinatario, valor): # tentar utilizar os defs já prontos para manipular está transferência 
+        """
+        Objetivo: método para transferir um valor entre duas contas;
+        Entradas: valor (float) e obj do destinatário 
+        Saída: Se ok -> True, Se NOK -> False.
+        """
+        if self.sacar(valor, destinatario.titular): # destinatario.titular para considerar o titular da conta que acontecerá o saque.
+            destinatario.depositar(valor, self.titular) #self.titular para aparecer o nome quem depositou.
+        
