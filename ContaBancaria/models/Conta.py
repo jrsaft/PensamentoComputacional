@@ -16,7 +16,7 @@ class Conta:
 
     def depositar(self, valor, remetente = None): # None para não dar erro.
         op = 1
-        if destinatario != None:
+        if remetente != None:
             op= 2 # transferencia
         if valor > 0: # Conferindo se o número é negativo
             self.saldo = self.saldo + valor 
@@ -69,12 +69,10 @@ class Conta:
                   + ":" + str(dt.tm_sec) + " " + str(dt.tm_mday) + "/" + str(dt.tm_mon) + "/" + str(dt.tm_year))
                 # utilizando de cada item do localtime
             
-    def transferencia(self, destinatario, valor): # tentar utilizar os defs já prontos para manipular está transferência 
-        """
-        Objetivo: método para transferir um valor entre duas contas;
-        Entradas: valor (float) e obj do destinatário 
-        Saída: Se ok -> True, Se NOK -> False.
-        """
-        if self.sacar(valor, destinatario.titular): # destinatario.titular para considerar o titular da conta que acontecerá o saque.
-            destinatario.depositar(valor, self.titular) #self.titular para aparecer o nome quem depositou.
+    def transferencia(self, destinatario, valor):
+        if self.sacar(valor, destinatario.titular):
+            destinatario.depositar(valor, self.titular)
+            return True
+        return False
+
         
