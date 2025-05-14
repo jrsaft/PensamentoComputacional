@@ -25,7 +25,7 @@ while True:
         titularsaque = input("Quem deseja realizar um saque?")
         valorsaque = float(input("De quanto será o saque?"))
         for conta in Banco:
-            if conta.titular == titularsaque:
+            if conta.titular.upper() == titularsaque.upper():
                 conta.sacar(valorsaque)
                 print(f"O saldo de",titularsaque,"é: R$:",conta.saldo)
     elif op == "2":

@@ -5,7 +5,7 @@ class Conta:
     Classe que implementa métodos para manipular uma conta bancária
     Atributos: titular(str), saldo (float), limite (float) e históricos (lista de dicionários)
 
-    OBS: Operações no histórico: 0 - sacar, 1 - depositar, 2 - transferir 
+    OBS: Operações no histórico: 0 - sacar, 1 - depositar, 2 - transferir, 3 - pix
     '''
     
     def __init__(self, titular, saldo, limite, historico):
@@ -14,7 +14,7 @@ class Conta:
         self.limite = limite
         self.historico = historico
 
-    def depositar(self, valor, remetente = None): # None para não dar erro.
+    def depositar(self, valor, remetente = ""): # None para não dar erro.
         op = 1
         if remetente != None:
             op= 2 # transferencia
@@ -74,5 +74,25 @@ class Conta:
             destinatario.depositar(valor, self.titular)
             return True
         return False
+    def pix(self, destinatario, valor):
+        op = "3"
+        if valor >= 0:
+            if valor <= self.saldo:
+                self.sacar(valor)
+                self.historico.append({"operacao": op,
+                                    "remetente": self.titular,
+                                     "destinatario": destinatario,
+                                     "valor": valor,
+                                     "saldo": self.saldo,
+                                     "dataetempo":int(time.time())})
+                destinatario.depositar(valor)
+                destinatario.historico.append({"operacao": op,
+                                    "remetente": self.titular,
+                                     "destinatario": destinatario,
+                                     "valor": valor,
+                                     "saldo": self.saldo,
+                                     "dataetempo":int(time.time())})
+                print("Pix realizado")
+
 
         
